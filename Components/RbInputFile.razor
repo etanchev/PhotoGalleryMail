@@ -1,0 +1,14 @@
+﻿@*@inherits RbInputFileBase*@
+@inherits InputFile
+
+<input type="file"  class="inputfile" multiple  />
+<label for="file">Attach Files</label>
+<label>@FileCount</label>
+
+
+@code{
+    [Parameter]
+    public string FileCount { get; set; }
+
+    
+}

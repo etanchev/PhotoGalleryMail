@@ -1,0 +1,92 @@
+﻿@inject ISessionStorageService  sessionStore
+@inject IWebAssemblyHostEnvironment env
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
+
+
+<AuthorizeView>
+    <Authorized>
+        <div class="d-flex flex-row w-100">
+            <div class="mr-auto pt-2 pb-2">
+                <div class="d-flex flex-column w-100 " @onclick="Subscribe" style="cursor:pointer">
+                    <span class="oi oi-bell my-yellow-color w-100 text-center"></span>
+                    <span class="my-yellow-color w-100 ext-center" style="font-size:0.5rem" aria-hidden="true">Subscribe</span>
+                </div>
+            </div>
+            <div style="color:white">  @*@context.User.Identity.Name!*@</div>
+            <div class="p-0  d-flex flex-row ">
+                <button class="nav-link btn btn-link" @onclick="BeginSignOut">
+                    <span class="oi oi-lock-unlocked my-yellow-color" aria-hidden="true"></span>
+                    <span style="color:white">Log out</span>
+
+                </button>
+            </div>
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/login"> <span class="oi oi-lock-locked my-yellow-color" aria-hidden="true"></span> <span style="color:white">Log in</span> </a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+
+
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+
+    internal class Token
+    {
+        public string access_token { get; set; }
+    }
+
+    private async Task Subscribe()
+    {
+        bool result;
+
+
+        if (env.IsDevelopment())
+        {
+            result = await sessionStore.ContainKeyAsync("oidc.user:https://localhost:4001:PhotoGalleryCoreAppWASM");
+        }
+        else
+        {
+            result = await sessionStore.ContainKeyAsync("oidc.user:https://accounts.PhotoGallery.photography:PhotoGalleryCoreAppWASM");
+        }
+
+        if (result)
+        {
+            Console.WriteLine("Key Exist in session");
+        }
+        else
+        {
+            Console.WriteLine("Key Not Found in session");
+
+        }
+
+        Token token = null;
+
+        if (env.IsDevelopment())
+        {
+            token = await sessionStore.GetItemAsync<Token>("oidc.user:https://localhost:4001:PhotoGalleryCoreAppWASM");
+            await JS.Subscribe(token.access_token, "https://localhost:6001");
+            //await JS.InvokeAsync<string>("subscribe", token.access_token, "https://localhost:6001");
+            //Console.WriteLine(token.access_token);
+        }
+        else
+        {
+            token = await sessionStore.GetItemAsync<Token>("oidc.user:https://accounts.PhotoGallery.photography:PhotoGalleryCoreAppWASM");
+            await JS.Subscribe(token.access_token, "https://api.PhotoGallery.photography");
+            //await JS.InvokeAsync<string>("subscribe", token.access_token, "https://api.PhotoGallery.photography");
+            //Console.WriteLine(token.access_token);
+        }
+
+
+
+    }
+}

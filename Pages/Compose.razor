@@ -1,0 +1,222 @@
+﻿@page "/compose"
+@inject NavigationManager NavigationManager
+@inject ApiCalls ApiCall
+@using Microsoft.Extensions.Logging
+@inject HttpClient Http
+@inject ILogger<Compose>  logger
+
+<style>
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+        .inputfile + label {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: rgba(206,164,52,1);
+            background-color: rgba(14, 31, 51, 1);
+            display: inline-block;
+        }
+
+            .inputfile:focus + label,
+            .inputfile + label:hover {
+                background-color: rgba(14, 31, 51, 0.9);
+            }
+        .inputfile + label {
+            cursor: pointer; /* "hand" cursor */
+        }
+       /* .inputfile:focus + label {
+            outline: 1px dotted #000;
+            outline: -webkit-focus-ring-color auto 5px;
+        }*/
+</style>
+<AuthorizeView Roles="admin">
+    <Authorized Context="Auth">
+        <div class="d-flex flex-column border-right border-top border-left border-bottom-0" style="border-color:rgba(206,164,52,1)">
+
+            <BSpinner @ref="Spiner" IsVisible="false"></BSpinner>
+
+            <EditForm Model="@mailSend" OnValidSubmit="@Send">
+
+                <div class="d-flex  w-100 p-2  my-deepblue-color-background">
+                    <div class="mr-auto p-0">
+                        <span class="oi oi-arrow-left p-1 my-yellow-color-background my-deepblue-color-text rounded" style="cursor:pointer" @onclick="(e => Return())"></span>
+                    </div>
+                    <div class="d-flex p-0 flex-row">
+                        <button class="mr-auto p-0 pl-2 pr-2 my-yellow-color-background my-deepblue-color-text rounded " disabled=@IsEmailSending style="outline:hidden" type="submit">Send</button>
+                        @*<span class="mr-auto p-1 ml-2 my-yellow-color-background my-deepblue-color-text rounded" @onclick="(e => Send())">Send</span>*@
+                    </div>
+                </div>
+
+
+                <DataAnnotationsValidator />
+                @*<ValidationSummary />*@
+
+                <RbInputText Label="To:" class="test" ValidationFor="@(()=> mailSend.To)" @bind-Value="mailSend.To" />
+                <RbInputText Label="Subject:" class="test" ValidationFor="@(()=> mailSend.Subject)" @bind-Value="mailSend.Subject" />
+
+
+                
+                <label class="p-2">
+                    Max @maxAllowedFiles files:
+                    <InputFile OnChange="(e=>OnChooseFile(e))" name="file" id="file" class="inputfile " multiple></InputFile>
+                    <label for="file" class="rounded p-1 mb-0">Attach <span class="oi oi-file my-yellow-color" style="font-size: 1rem;"></span></label>
+                   
+                </label>
+
+              
+                <div class="bg-warning p-0">
+                    <ul class="my-deepblue-color-text">
+                        @((MarkupString)Notification)
+                    </ul>
+                </div>
+
+                <RbInputHidden @bind-Value="mailSend.Attachments" > </RbInputHidden>
+
+                <InputTextArea @bind-Value="mailSend.Body" class="w-100 overflow-auto textareastyle p-2"></InputTextArea>
+
+            </EditForm>
+
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized for this section!!!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+
+
+    private MailSendModel mailSend = new MailSendModel();
+    private bool IsEmailSending = false;
+    protected BSpinner Spiner { get; set; }
+
+
+    private string Notification = "";
+
+
+    private IList<UploadResult> uploadResults = new List<UploadResult>();
+    private int maxAllowedFiles = 3;
+    private bool shouldRender;
+   
+
+    protected override bool ShouldRender() => shouldRender;
+
+
+
+    private bool IsFileCountInLimit(InputFileChangeEventArgs e)
+    {
+        if (e.FileCount <= maxAllowedFiles)
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsFilesSizeInLimit(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            if (file.Size < 512000)
+            {
+
+            }
+            else { return false; }
+        }
+
+        return true;
+    }
+
+    private async Task OnChooseFile(InputFileChangeEventArgs e)
+    {
+      
+        shouldRender = false;
+        Notification = "";
+        mailSend.Attachments = "";
+
+
+        if (!IsFileCountInLimit(e))
+        {
+            Notification = "File Count Limit exceeded";
+            shouldRender = true;
+            return;
+        }
+        if (!IsFilesSizeInLimit(e))
+        {
+            Notification = "File Size Limit exceeded";
+            shouldRender = true;
+            return;
+        }
+
+        using var content = new MultipartFormDataContent();
+
+
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var fileContent = new StreamContent(file.OpenReadStream());
+            content.Add(fileContent, name: "\"files\"", file.Name);
+        }
+
+
+        Spiner.Show();
+        var response = await ApiCall.PostFiles(content);
+        Spiner.Hide();
+
+        var newUploadResults = await response.Content
+                .ReadFromJsonAsync<IList<UploadResult>>();
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            foreach (var result in newUploadResults)
+            {
+                if (result.Uploaded)
+                {
+                    Notification += $"<li>  {result.FileName} : Uploaded </li>";
+                    mailSend.Attachments += result.FileName + ";";
+                }
+                else
+                {
+                    Notification += $"<li>  {result.FileName} : Failed </li>";
+                }
+            }
+        }
+        else
+        {
+            Notification += $"<li> Fail to post files </li>";
+
+        }
+        shouldRender = true;
+    }
+
+    private void Return()
+    {
+
+        NavigationManager.NavigateTo("inbox");
+    }
+
+    private async Task Send()
+    {
+        IsEmailSending = true;
+        Spiner.Show();
+        await ApiCall.PostEmail(mailSend);
+        IsEmailSending = false;
+        Spiner.Hide();
+        Return();
+    }
+
+    public class UploadResult
+    {
+        public bool Uploaded { get; set; }
+
+        public string FileName { get; set; }
+
+        public string StoredFileName { get; set; }
+
+        public int ErrorCode { get; set; }
+    }
+}

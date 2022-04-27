@@ -1,0 +1,66 @@
+﻿@page "/sent"
+
+@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
+@inject GlobalComponentValues Values
+@inject ApiCalls ApiCalls
+
+<AuthorizeView Roles="admin">
+    <Authorized>
+        @if (EmailSentDbModels == null)
+        {
+            <BSpinner @ref="Spiner" IsVisible="true"></BSpinner>
+        }
+        else
+        {
+            <div class="d-flex flex-column p-2 p-sm-1">
+                @foreach (var EmailSentDbModel in EmailSentDbModels)
+                {
+                    <ListMailSentItem  EmailSentDbModel="EmailSentDbModel" MailItemCallback="DeleteEmail"></ListMailSentItem>
+                }
+            </div>
+
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized for this section!!!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [Parameter]
+    public EmailSentDbModel[] EmailSentDbModels { get; set; }
+
+    protected BSpinner Spiner { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmailSentDbModels = null;
+        EmailSentDbModels = await ApiCalls.GetSentEmails();
+        //Values.SetMailCounter(EmailSentDbModel.Count());
+        //await GetEmails();
+
+    }
+
+
+
+    private async Task RefreshInbox()
+    {
+        EmailSentDbModels = null;
+        Spiner.Show();
+        EmailSentDbModels = await ApiCalls.GetSentEmails();
+        Spiner.Hide();
+        //Values.SetMailCounter(EmailSentDbModel.Count());
+        // StateHasChanged();
+
+    }
+
+
+    private async Task DeleteEmail(int id)
+    {
+        await ApiCalls.DeleteSentEmail(id);
+        await RefreshInbox();
+
+    }
+}

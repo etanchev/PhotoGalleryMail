@@ -1,0 +1,95 @@
+﻿@page "/inbox"
+@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
+@inject GlobalComponentValues Values
+@inject ApiCalls ApiCalls
+@inject IJSRuntime JS;
+
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <div class="p-2 p-sm-1 1 ">
+            <span class="oi oi-reload my-yellow-color-background rounded p-2 my-deepblue-color-text" style="cursor:pointer" @onclick="RefreshInbox"></span>
+
+        </div>
+        <div class="d-flex flex-column p-2 p-sm-1">
+            @if (SendGridDbModels == null)
+            {
+                <BSpinner @ref="Spiner"  IsVisible="true"></BSpinner>
+            }
+            else
+            {
+                @if (Refresh)
+                {
+                    <BSpinner @ref="Spiner" IsVisible="true"></BSpinner>
+                }
+                else
+                {
+                    @foreach (var SendGridDbModel in SendGridDbModels)
+                    {
+                        <ListMailItem SendGridDbModel="SendGridDbModel" MailItemCallback="DeleteEmail"></ListMailItem>
+                    }
+                }
+            }
+        </div>
+        </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized for this section!!!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+@code {
+
+    [Parameter]
+    public List<SendGridDbModel> SendGridDbModels { get; set; }
+
+    protected BSpinner Spiner { get; set; }
+
+    protected bool Refresh { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SendGridDbModels = null;
+        SendGridDbModels = await ApiCalls.GetEmails();
+        int mailCount = SendGridDbModels.Where(x => x.IsRed == false).Count();
+        Values.SetMailCounter(mailCount); //count unread emails
+
+        //await  JS.InvokeAsync<string>("setBadge", mailCount);
+    }
+
+    private async Task RefreshInbox()
+    {
+        Refresh = true;
+        SendGridDbModels = await ApiCalls.GetEmails();
+        Refresh = false;
+        Values.SetMailCounter(SendGridDbModels.Where(x => x.IsRed == false).Count()); //count unread emails
+    }
+
+
+    private async Task DeleteEmail(int id)
+    {
+        Refresh = true;
+
+        var result = await ApiCalls.DeleteEmail(id);
+        if (result.IsSuccessStatusCode)
+        {
+            SendGridDbModels.Remove(SendGridDbModels.Where(x => x.Id == id).FirstOrDefault());
+
+        }
+
+        Refresh = false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+}

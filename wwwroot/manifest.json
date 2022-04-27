@@ -1,0 +1,16 @@
+{
+  "name": "PhotoGallery Mail",
+  "short_name": "PhotoGallery Mail",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0e1f33",
+  "theme_color": "#03173d",
+  "icons": [
+    {
+      "src": "crab.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+
+}

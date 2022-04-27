@@ -1,0 +1,92 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="card w-100 mb-2">
+    <div class="card-header @color">
+        <div class="d-flex">
+            <div class="mr-auto p-0"> 
+            <div class="my-yellow-color"  style="cursor:pointer; word-break:break-word" @onclick="(e => { NavigateToPreviewEmail();  })"><b>From: </b> @SendGridDbModel.From</div>
+            </div>
+            <div class="p-0  d-flex flex-row ">
+                    <div class="p-1  mr-1  " @onclick="(e => { NavigateToPreviewEmail();  })" style="cursor:pointer">
+                        <span class="oi oi-envelope-open my-yellow-color"></span>
+                    </div>
+                <div class="p-1 " style="cursor:pointer"
+                     @onclick="(e => { ShowDialog();  })">
+                    <span class="oi oi-trash my-yellow-color"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="card-subtitle mb-2 text-muted my-deepblue-color-text">@SendGridDbModel.DateTime.ToString("dd-MMM-yyyy h:mm tt")</div>
+        <div class="card-text">@SendGridDbModel.Subject</div>
+    </div>
+</div>
+
+<ModalDialog @ref="ModalDialog" Text="Are you sure u want to delete?" ModalDialogCallback="DialogActionFeedback"></ModalDialog>
+
+@code {
+
+    protected ModalDialog ModalDialog { get; set; }
+
+    [Parameter]
+    public SendGridDbModel SendGridDbModel { get; set; }
+
+    [Parameter]
+    public EventCallback<int> MailItemCallback { get; set; }
+
+    private string color { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+        if (SendGridDbModel.IsRed == false)
+        {
+            color = "my-deepblue-color-background";
+        }
+        else
+        {
+            color = "my-gray-color";
+        }
+    }
+
+   
+
+
+    protected async Task OnModalItemDeleteConfirm(int value)
+    {
+        await MailItemCallback.InvokeAsync(value);
+
+    }
+
+    private void ShowDialog()
+    {
+        ModalDialog.Show();
+    }
+
+    private void NavigateToPreviewEmail()
+    {
+        NavigationManager.NavigateTo("preview-email/"+ SendGridDbModel.Id);
+    }
+
+    private async Task DialogActionFeedback(bool Confirmed)
+    {
+        if (Confirmed)
+        {
+            ModalDialog.Hide();
+
+            await OnModalItemDeleteConfirm(SendGridDbModel.Id);
+
+
+        }
+        else
+        {
+            ModalDialog.Hide();
+        }
+
+    }
+
+
+
+}

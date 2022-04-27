@@ -1,0 +1,70 @@
+﻿@page "/authentication/{action}"
+
+<RemoteAuthenticatorView Action="@Action"  
+                         LogInFailed="FailLogin" 
+                         CompletingLoggingIn="SuccessfulLogin()"  >
+     
+    <LoggingIn>
+        @LogInFragment("Logging in ...")
+    </LoggingIn>
+    <LogOut>
+        <div class="alert alert-info" role="alert">Login out....</div>
+    </LogOut>
+    <Registering>
+        <div class="alert alert-info" role="alert">Registering....</div>
+    </Registering>
+    
+    
+
+
+</RemoteAuthenticatorView>
+
+
+
+@code{
+
+    [Parameter] public string Action { get; set; }
+
+
+    //dinamicly created Component
+    private static RenderFragment LogInFragment(string message)
+    {
+        Console.WriteLine($"Succesful Login : {message}");
+        return builder =>
+        {
+            builder.OpenElement(0, "div");
+            builder.AddAttribute(1, "class", "alert alert-info");
+            builder.AddAttribute(2, "role", "alert");
+            builder.AddContent(3, $"Redirect to login provider.. {message}'");
+            builder.CloseElement();
+        };
+
+    }
+    private static RenderFragment FailLogin(string message)
+    {
+
+        return builder =>
+        {
+            builder.OpenElement(0, "div");
+            builder.AddAttribute(1, "class", "alert alert-danger ");
+            builder.AddAttribute(2, "role", "alert");
+            builder.AddContent(3, $"Fail to log in.");
+            builder.CloseElement();
+        };
+
+    }
+    private  RenderFragment SuccessfulLogin()
+    {
+
+        return builder =>
+        {
+            builder.OpenElement(0, "div");
+            builder.AddAttribute(1, "class", "alert alert-success ");
+            builder.AddAttribute(2, "role", "alert");
+            builder.AddContent(3, $"Login Complated Successfully.");
+            builder.CloseElement();
+        };
+
+    }
+
+}

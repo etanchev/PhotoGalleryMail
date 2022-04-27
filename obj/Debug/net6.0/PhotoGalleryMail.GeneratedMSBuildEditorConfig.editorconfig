@@ -1,0 +1,111 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = browser
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = true
+build_property.IncludeAllContentForSelfExtract = 
+build_property.RootNamespace = PhotoGalleryMail
+build_property.RootNamespace = PhotoGalleryMail
+build_property.ProjectDir = C:\Users\tanch\source\repos\PhotoGalleryMail\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\tanch\source\repos\PhotoGalleryMail
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/BSpinner.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCU3Bpbm5lci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/CustomInputText.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21JbnB1dFRleHQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/ModalDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xNb2RhbERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/RbInputFile.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYklucHV0RmlsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/RbInputHidden.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYklucHV0SGlkZGVuLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Authentication.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Claims.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xhaW1zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Dialog.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/PreviewEmail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJldmlld0VtYWlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/PreviewSentEmail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJldmlld1NlbnRFbWFpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Sent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/ListMailItem.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExpc3RNYWlsSXRlbS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/ListMailSentItem.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExpc3RNYWlsU2VudEl0ZW0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/LoginDisplay.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luRGlzcGxheS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/RedirectToLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFJlZGlyZWN0VG9Mb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Components/RbInputText.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYklucHV0VGV4dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-0qz8ar3a65
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Compose.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tcG9zZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-tdz96s6ybe
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Pages/Inbox.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5ib3gucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-u542h64aea
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-hd152goc1x
+
+[C:/Users/tanch/source/repos/PhotoGalleryMail/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-38mc9y0qb6

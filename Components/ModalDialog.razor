@@ -1,0 +1,25 @@
+﻿@inherits ModalDialogBase
+
+@if (IsVisible)
+{
+    <!-- Modal -->
+    <div class="modal fade show d-block" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header my-deepblue-color-background">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><span class="my-yellow-color">Comfirm Action</span></h5>
+                    <button @onclick="(e => OnModalDialogConfirmation(false))" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="oi oi-x my-yellow-color" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="my-deepblue-color">@Text</span>
+                </div>
+                <div class="modal-footer my-deepblue-color-background">
+                    <button @onclick="(e => OnModalDialogConfirmation(true))" type="button" class="btn btn-warning">Yes</button>
+                    <button @onclick="(e => OnModalDialogConfirmation(false))" type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
